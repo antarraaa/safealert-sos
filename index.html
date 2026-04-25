@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeAlert Pro</title>
+
+<style>
+/* ===== BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family: 'Segoe UI', sans-serif;
+  background:#0a0a12;
+  color:#fff;
+}
+
+/* ===== NAV ===== */
+.nav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:15px 20px;
+  background:rgba(255,255,255,0.05);
+}
+.nav-title span{color:#e63946;}
+.nav-tabs button{
+  background:none;border:none;color:#aaa;
+  padding:6px 12px;cursor:pointer;
+}
+.nav-tabs .active{color:#fff;background:rgba(255,255,255,0.1);border-radius:6px}
+
+/* ===== PAGE ===== */
+.page{display:none;padding:20px}
+.page.active{display:block}
+
+/* ===== HERO ===== */
+.hero{text-align:center;margin:30px 0}
+.hero span{color:#e63946}
+
+/* ===== SOS ===== */
+.sos-wrapper{text-align:center;margin-top:30px}
+.sos-btn{
+  width:130px;height:130px;border-radius:50%;
+  background:#e63946;border:none;color:#fff;
+  font-size:30px;font-weight:bold;cursor:pointer;
+  box-shadow:0 0 20px rgba(230,57,70,0.5);
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:15px;border-radius:10px;margin:10px 0;
+}
+
+/* ===== CONTACTS ===== */
+.contact{padding:10px;border-bottom:1px solid #222}
+
+/* ===== MAP ===== */
+iframe{width:100%;height:300px;border:none;border-radius:10px}
+
+/* ===== BUTTON ===== */
+.btn{
+  padding:8px 12px;border:none;border-radius:6px;
+  background:#e63946;color:#fff;cursor:pointer;
+}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;top:20px;right:20px;
+  background:#1a1a2e;padding:15px;border-radius:10px;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-title">Safe<span>Alert</span></div>
+  <div class="nav-tabs">
+    <button onclick="showPage('home')" class="active">SOS</button>
+    <button onclick="showPage('map')">Map</button>
+    <button onclick="showPage('admin')">Admin</button>
+    <button onclick="showPage('contacts')">Contacts</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🚨 Alert Sent!</div>
+
+<!-- HOME -->
+<div class="page active" id="home">
+  <div class="hero">
+    <h1>Your Safety <br><span>One Tap Away</span></h1>
+  </div>
+
+  <div class="sos-wrapper">
+    <button class="sos-btn" onclick="sendSOS()">SOS</button>
+  </div>
+
+  <div class="card">
+    Alerts Sent: <span id="count">0</span>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="page" id="map">
+  <h2>📍 Live Location</h2>
+  <iframe src="https://www.google.com/maps?q=Aurangabad&output=embed"></iframe>
+</div>
+
+<!-- ADMIN -->
+<div class="page" id="admin">
+  <h2>Admin Dashboard</h2>
+  <div id="alerts"></div>
+</div>
+
+<!-- CONTACTS -->
+<div class="page" id="contacts">
+  <h2>Contacts</h2>
+
+  <input id="name" placeholder="Name">
+  <input id="phone" placeholder="Phone">
+  <button class="btn" onclick="addContact()">Add</button>
+
+  <div id="contactList"></div>
+</div>
+
+<script>
+
+/* PAGE SWITCH */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* SOS FUNCTION */
+let count=0;
+function sendSOS(){
+  count++;
+  document.getElementById('count').innerText=count;
+
+  showToast();
+
+  const alert = document.createElement("div");
+  alert.className="card";
+  alert.innerText="🚨 SOS triggered at "+new Date().toLocaleTimeString();
+  document.getElementById('alerts').prepend(alert);
+}
+
+/* TOAST */
+function showToast(){
+  const t=document.getElementById('toast');
+  t.style.display="block";
+  setTimeout(()=>t.style.display="none",3000);
+}
+
+/* CONTACTS */
+function addContact(){
+  let name=document.getElementById('name').value;
+  let phone=document.getElementById('phone').value;
+
+  if(!name || !phone) return alert("Fill all");
+
+  const div=document.createElement("div");
+  div.className="contact";
+  div.innerText=name+" - "+phone;
+
+  document.getElementById('contactList').appendChild(div);
+}
+
+</script>
+
+</body>
+</html>
